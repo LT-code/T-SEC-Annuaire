@@ -159,3 +159,12 @@ append_dot_mydomain = no
 
 ### Trenn-Zeichen für "Address Tagging"
 recipient_delimiter = +
+
+{% if relay.use %} 
+relayhost = {{ relay.smtp }}
+smtp_use_tls = yes
+smtp_sasl_auth_enable = yes
+smtp_sasl_security_options =
+smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
+{% endif %}

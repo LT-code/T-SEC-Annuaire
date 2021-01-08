@@ -13,6 +13,14 @@
     dest: /etc/postfix/main.cf
   tags: postfix
 
+- name: Template sasl_passwd
+  template:
+    src: templates/sasl_passwd.j2
+    dest: /etc/postfix/sasl_passwd
+    mode: "0600"
+  tags: postfix
+  when: relay.use
+
 - name: Copy master.cf
   copy:
     src: files/master.cf
