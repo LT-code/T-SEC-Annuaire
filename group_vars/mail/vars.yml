@@ -1,11 +1,11 @@
 ---
 # Group vars for all hosts
 
-host: mail
-domain: my.server
+host: T-SEC-MAIL
+domain: tsec901g3.tk
 ip_address: "{{ ansible_default_ipv4.address }}"
-mail_fqdn: "{{ host }}.{{ domain }}"
+mail_fqdn: "{{ domain }}"
 smtp_fqdn: "smtp.{{ domain }}"
 imap_fqdn: imap.{{ domain }}
-mail_user: mail
+mail_user: admin
 email_for_updates: "{{ mail_user }}@{{ domain }}"

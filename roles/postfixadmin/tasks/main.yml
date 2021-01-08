@@ -1,0 +1,64 @@
+---
+# Install postfix web admin
+
+- name: Install base dependencies
+  apt:
+    pkg:
+      - postfixadmin
+      - python-certbot-apache
+    state: present
+
+- name: Delete default apache config
+  file:
+    path: /etc/apache2/sites-enabled/000-default.conf
+    state: absent
+
+- name: Copy config files
+  copy:
+    src: "{{item.src}}"
+    dest: "{{item.dest}}"
+    mode: "{{item.mode}}"
+    owner: "{{item.user}}"
+    group: "{{item.group}}"
+  with_items:
+    - {mode: 644, user: "root", group: "root", src: "postfixadmin.conf", dest: "/etc/apache2/sites-available"}
+
+- name: Copy templates config giles
+  template:
+    src: "{{item.src}}"
+    dest: "{{item.dest}}"
+    mode: "{{item.mode}}"
+    owner: "{{item.user}}"
+    group: "{{item.group}}"
+  with_items:
+    - {mode: 640, user: "root", group: "www-data", src: "dbconfig.inc.php.j2", dest: "/etc/postfixadmin/dbconfig.inc.php"}
+    - {mode: 644, user: "root", group: "root", src: "config.inc.php.j2", dest: "/etc/postfixadmin/config.inc.php"}
+
+- name: Create symbolic link 
+  file:
+    src: "/etc/apache2/sites-available/{{item}}"
+    dest: "/etc/apache2/sites-enabled/{{item}}"
+    state: link
+  with_items:
+    - postfixadmin.conf
+
+- name: Resolving template_c error
+  file:
+    path: /usr/share/postfixadmin/templates_c/
+    owner: www-data
+    group: www-data
+    state: directory
+
+- name: enable rewrite apache
+  shell: a2enmod rewrite
+
+- name: enable ssl apache
+  shell: a2enmod ssl
+
+- name: install apache https
+  shell: certbot --apache -d postfix.tsec901g3.tk --agree-tos -m admin@tsec901g3.tk -n
+
+- name: restart apache2 configuration
+  service:
+    name: apache2
+    state: restarted

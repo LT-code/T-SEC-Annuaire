@@ -1,13 +1,13 @@
 ---
 # This is the top-level playbook
 
-- hosts: all
-  user: root
-
+- hosts: mail
+  become: true
   roles:
-    - general
-    - certbot
-    - mariadb
-    - dovecot
-    - postfix
-    - rspamd
+    #- general
+    #- certbot
+    #- mariadb
+    #- dovecot
+    #- postfix
+    #- rspamd
+    - postfixadmin

@@ -1,2 +1,2 @@
 [mail]
-my.mail.server
+51.103.39.69 ansible_ssh_user=azureuser 
