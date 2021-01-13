@@ -21,6 +21,10 @@
   tags: postfix
   when: relay.use
 
+- name: activate sasl_passwd
+  shell: postmap /etc/postfix/sasl_passwd
+  when: relay.use
+
 - name: Copy master.cf
   copy:
     src: files/master.cf

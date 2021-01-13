@@ -3,6 +3,9 @@
 #############################
 
 protocols = imap lmtp sieve
+dict {
+  quota = mysql:/etc/dovecot/dovecot-sql.conf
+}
 
 ###
 ### TLS Config

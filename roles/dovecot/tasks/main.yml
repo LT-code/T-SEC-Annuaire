@@ -53,3 +53,9 @@
     group: vmail
     mode: "0644"
   tags: dovecot
+
+- name: restart dovecot
+  service:
+    name: dovecot
+    state: restarted
+  tags: dovecot
