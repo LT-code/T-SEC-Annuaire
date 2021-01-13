@@ -1,0 +1,90 @@
+--- # General server tasks
+
+- name: Create mail user
+  user:
+    name: vmail
+    home: /var/vmail
+
+- name: Create mail user sieve directory
+  file:
+    path: /var/vmail/sieve/global
+    state: directory
+    owner: vmail
+    group: vmail
+    mode: 0770
+
+- name: Create mail user mailbox directory
+  file:
+    path: /var/vmail/mailboxes
+    state: directory
+    owner: vmail
+    group: vmail
+    mode: 0770
+
+- name: Install base dependencies
+  apt:
+    pkg:
+      - apt-transport-https
+      - ca-certificates
+      - gnupg-agent
+      - software-properties-common
+    state: latest
+
+- name: Add the rspamd apt key
+  apt_key:
+    url: https://rspamd.com/apt-stable/gpg.key
+    state: present
+
+- name: Add rspamd repository
+  apt_repository:
+    repo: "deb http://rspamd.com/apt-stable/ stretch main"
+    state: present
+
+- name: Update
+  apt: update_cache=yes
+
+- name: Upgrade
+  apt: upgrade=safe
+
+- name: Install programs
+  apt:
+    state: latest
+    pkg:
+      - certbot
+      - mariadb-server
+      - dovecot-core
+      - dovecot-imapd
+      - dovecot-lmtpd
+      - dovecot-mysql
+      - dovecot-sieve
+      - dovecot-managesieved
+      - rspamd
+      - redis-server
+      - postfix
+      - postfix-mysql
+      - postfix-pcre
+      - redis-server
+      - libsasl2-modules
+      - libsasl2-modules-sql
+
+
+- name: Set hostname
+  hostname:
+    name: "{{ host }}"
+
+- name: Add hostname to /etc/hosts
+  lineinfile:
+    dest: /etc/hosts
+    regexp: "^127.0.1.1"
+    line: "127.0.1.1 {{ mail_fqdn }} {{ host }}"
+    state: present
+
+- name: Set mailname
+  copy:
+    dest: "/etc/mailname"
+    content: "{{ mail_fqdn }}"
+
+- name: Restart systemd-logind
+  service:
+    name: systemd-logind
+    state: restarted
