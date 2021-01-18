@@ -1,0 +1,37 @@
+---
+- name: Copy templates config giles
+  template:
+    src: "rspamd.apache.conf.j2"
+    dest: "/etc/apache2/sites-available/rspamd.conf"
+    owner: "root"
+    group: "www-data"
+
+- name: Create symbolic link 
+  file:
+    src: "/etc/apache2/sites-available/{{item}}"
+    dest: "/etc/apache2/sites-enabled/{{item}}"
+    state: link
+  with_items:
+    - rspamd.conf
+    - 000-default.conf
+
+- name: allow proxy
+  shell: a2enmod proxy
+  tags: rspamd
+
+- name: allow proxy_http
+  shell: a2enmod proxy_http
+  tags: rspamd
+
+- name: restart apache2 configuration
+  service:
+    name: apache2
+    state: restarted
+
+- name: install apache https
+  shell: certbot --apache -d rspamd.{{domain}} --agree-tos -m admin@tsec901g3.tk -n
+
+- name: restart apache2 configuration
+  service:
+    name: apache2
+    state: restarted

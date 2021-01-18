@@ -1,0 +1,15 @@
+<VirtualHost *:80>
+        ProxyRequests Off
+
+        <Proxy *>
+          Require all granted
+        </Proxy>
+
+        
+        ProxyPass / http://localhost:11334/
+        ProxyPassReverse / http://localhost:11334/
+
+        ServerName rspamd.{{domain}}
+        ServerAlias rspamd
+</VirtualHost>
+
