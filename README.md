@@ -1,7 +1,6 @@
 # Ansible playbook to setup a LDAP infrastructure
 
-#
-This is an Ansible-Playbook for the great mail server setup described in this tutorial: https://thomas-leister.de/mailserver-debian-stretch/ written by Thomas Leister.
+This is for the project T-Sec-901
 
 ## Run
 
@@ -17,6 +16,8 @@ ansible-playbook -i ./hosts site.yml --ask-vault-pass
 - Public domain resolving to the server
 
 ## Mail Server
+
+This is an Ansible-Playbook for the great mail server setup described in this tutorial: https://thomas-leister.de/mailserver-debian-stretch/ written by Thomas Leister.
 
 #### Variables
 
