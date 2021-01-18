@@ -17,7 +17,7 @@ ansible-playbook -i ./hosts site.yml --ask-vault-pass
 
 ## Mail Server
 
-This is an Ansible-Playbook for the great mail server setup described in this tutorial: https://thomas-leister.de/mailserver-debian-stretch/ written by Thomas Leister.
+This is an Ansible-Playbook for the great mail server setup described in this tutorial: https://thomas-leister.de/mailserver-debian-stretch/.
 
 #### Variables
 
