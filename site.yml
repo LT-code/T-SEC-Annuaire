@@ -3,6 +3,8 @@
 
 - hosts: mail
   become: true
+  vars_files:
+  - group_vars/ssh-connection.yml
   roles:
     - general
     - certbot
