@@ -1,0 +1,5 @@
+hosts = localhost
+user = vmail
+password = {{vmail_pass}}
+dbname = vmail
+query = SELECT mailbox.username FROM mailbox INNER JOIN alias ON mailbox.username = alias.goto WHERE alias.address = '%s' AND mailbox.active = 1 AND alias.active = 1

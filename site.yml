@@ -4,10 +4,10 @@
 - hosts: mail
   become: true
   roles:
-    - general
-    - certbot
-    - mariadb
-    #- dovecot
-    #- postfix
+    #- general
+    #- certbot
+    #- mariadb
+    - dovecot
+    - postfix
     - rspamd
     - postfixadmin

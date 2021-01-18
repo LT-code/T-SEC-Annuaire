@@ -1,0 +1,5 @@
+hosts = localhost
+user = vmail
+password = {{vmail_pass}}
+dbname = vmail
+query = SELECT 1 FROM mailbox INNER JOIN domain ON mailbox.domain = domain.domain WHERE mailbox.username = '%s' AND mailbox.active = 1 AND domain.active = 1

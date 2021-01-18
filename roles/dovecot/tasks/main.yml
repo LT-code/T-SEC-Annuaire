@@ -1,61 +1,42 @@
 ---
 # Tasks file for dovecot
 
-- name: Delete default config
+- name: Ensure directory templates structure exists
   file:
-    state: absent
-    path: /etc/dovecot/
-  tags: dovecot
-
-- name: Create config directory
-  file:
-    path: /etc/dovecot
+    path: '/etc/dovecot/{{ item.path }}'
     state: directory
-  tags: dovecot
+  with_filetree: templates/
+  when: item.state == 'directory'
 
-- name: Template dovecot.conf
+- name: Ensure directory files structure exists
+  file:
+    path: '/etc/dovecot/{{ item.path }}'
+    state: directory
+  with_filetree: files/
+  when: item.state == 'directory'
+
+- name: Template dovecot
   template:
-    src: templates/dovecot.j2
-    dest: /etc/dovecot/dovecot.conf
+    src: '{{ item.src }}'
+    dest: '/etc/dovecot/{{ item.path }}'
     mode: "0644"
+  with_filetree: templates/
+  when: item.state == 'file'
   tags: dovecot
 
-- name: Template dovecot-sql.conf
-  template:
-    src: templates/dovecot-sql.j2
-    dest: /etc/dovecot/dovecot-sql.conf
-    mode: "0440"
-  tags: dovecot
-
-- name: Copy spam-global.sieve
+- name: Copy dovecot files
   copy:
-    src: files/spam-global.sieve
-    dest: /var/vmail/sieve/global/spam-global.sieve
+    src: '{{ item.src }}'
+    dest: '/etc/dovecot/{{ item.path }}'
     owner: vmail
     group: vmail
     mode: "0644"
+  with_filetree: files/
+  when: item.state == 'file'
   tags: dovecot
 
-- name: Copy learn-spam.sieve
-  copy:
-    src: files/learn-spam.sieve
-    dest: /var/vmail/sieve/global/learn-spam.sieve
-    owner: vmail
-    group: vmail
-    mode: "0644"
-  tags: dovecot
-
-- name: Copy learn-ham.sieve
-  copy:
-    src: files/learn-ham.sieve
-    dest: /var/vmail/sieve/global/learn-ham.sieve
-    owner: vmail
-    group: vmail
-    mode: "0644"
-  tags: dovecot
-
-- name: restart dovecot
-  service:
-    name: dovecot
-    state: restarted
-  tags: dovecot
+#- name: restart dovecot
+#  service:
+#    name: dovecot
+#    state: restarted
+#  tags: dovecot
