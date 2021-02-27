@@ -7,10 +7,19 @@
   - group_vars/ssh-connection.yml
   roles:
     - general
-    - certbot
-    - mariadb
-    - dovecot
-    - postfix
-    - rspamd
-    - postfixadmin
-    - rspamd-gui
+    - mail/general
+    - mail/certbot
+    - mail/mariadb
+    - mail/dovecot
+    - mail/postfix
+    - mail/rspamd
+    - mail/postfixadmin
+    - mail/rspamd-gui
+
+- hosts: kanban
+  become: true
+  vars_files:
+  - group_vars/ssh-connection.yml
+  roles:
+    - general
+    - wekan

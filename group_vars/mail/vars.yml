@@ -11,6 +11,12 @@ imap_fqdn: imap.{{ domain }}
 mail_user: admin
 email_for_updates: "{{ mail_user }}@{{ domain }}"
 
+ldap: "ldap"
+mysql: "mysql"
+
+data_source: "{{ ldap }}"
+
+
 # relay host
 relay:
   use: true
