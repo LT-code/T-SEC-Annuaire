@@ -1,0 +1,2 @@
+query_filter = mailacceptinggeneralid=%s
+result_attribute = maildrop

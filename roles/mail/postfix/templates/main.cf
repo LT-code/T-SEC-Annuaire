@@ -36,7 +36,6 @@ smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_una
 smtpd_sasl_auth_enable = yes
 smtpd_sasl_path = private/auth
 smtpd_sasl_type = dovecot
-smtpd_sender_restrictions = reject_unknown_sender_domain
 smtpd_tls_auth_only = yes
 
 smtpd_tls_cert_file=/etc/letsencrypt/live/{{mail_fqdn}}/fullchain.pem
@@ -55,10 +54,6 @@ milter_default_action = accept
 milter_mail_macros = i {mail_addr} {client_addr} {client_name} {auth_authen}
 milter_protocol = 6
 
-virtual_transport = lmtp:unix:private/dovecot-lmtp
-virtual_mailbox_domains = proxy:mysql:/etc/postfix/mysql/mysql-virtual-mailbox-domains.cf
-virtual_mailbox_maps = proxy:mysql:/etc/postfix/mysql/mysql-virtual-mailbox-maps.cf
-virtual_alias_maps = proxy:mysql:/etc/postfix/mysql/mysql-virtual-alias-maps.cf
 
 #inet_protocols = ipv4
 
@@ -68,4 +63,26 @@ smtp_use_tls = yes
 smtp_sasl_auth_enable = yes
 smtp_sasl_security_options = noanonymous
 smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+{% endif %}
+
+#####################
+# type data {{ data_source }}
+#####################
+{% if data_source == ldap %}
+virtual_alias_domains = ldap:/etc/postfix/ldap/virtual-alias-domains.cf
+virtual_mailbox_domains = $myhostname
+virtual_alias_maps = ldap:/etc/postfix/ldap/virtual-alias-maps.cf
+virtual_mailbox_base = /
+virtual_mailbox_maps = ldap:/etc/postfix/ldap/virtual-mailbox-maps.cf
+virtual_uid_maps = ldap:/etc/postfix/ldap/virtual_uid-maps.cf
+virtual_gid_maps = ldap:/etc/postfix/ldap/virtual-uid-maps.cf
+smtpd_sender_login_maps = ldap:/etc/postfix/ldap/smtpd-sender-login-maps.cf
+{% endif %}
+
+{% if data_source == mysql %}
+virtual_transport = lmtp:unix:private/dovecot-lmtp
+virtual_mailbox_domains = proxy:mysql:/etc/postfix/mysql/mysql-virtual-mailbox-domains.cf
+virtual_mailbox_maps = proxy:mysql:/etc/postfix/mysql/mysql-virtual-mailbox-maps.cf
+virtual_alias_maps = proxy:mysql:/etc/postfix/mysql/mysql-virtual-alias-maps.cf
+smtpd_sender_restrictions = reject_unknown_sender_domain
 {% endif %}

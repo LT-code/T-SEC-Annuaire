@@ -1,0 +1,45 @@
+- name: Ensure directory templates structure exists
+  file:
+    path: /var/spool/postfix/etc/ldap/tls/
+    state: directory
+
+- name: Check that the somefile.conf exists
+  stat:
+    path: /var/spool/postfix/etc/ldap/tls/CA.pem
+  register: stat_result
+  
+- name: Create the file, if it doesnt exist already
+  file:
+    path: /var/spool/postfix/etc/ldap/tls/CA.pem
+    state: touch
+  when: not stat_result.stat.exists
+
+- name: Template postfix {{ data_source }}
+  template:
+    src: ldap-tls-CA.nount 
+    dest: /etc/systemd/system/var-spool-postfix-etc-ldap-tls-CA.pem.mount
+  tags: postfix
+
+
+- name: reload systemd
+  command: systemctl daemon-reload
+
+- name: Reload mount service
+  service:
+    name: var-spool-postfix-etc-ldap-tls-CA.pem.mount
+    state: reloaded
+
+- name: Enable mount service
+  service:
+    name: var-spool-postfix-etc-ldap-tls-CA.pem.mount
+    enabled: yes
+
+- name: ansible create directory example
+  file:
+    path: /home/mail
+    state: directory
+
+
+#root@mailhost:~# chmod o+w /home/mail                                    # Make world writable or
+#root@mailhost:~# chown :<common GID> /home/mail && chmod g+w /home/mail  # use common group
+

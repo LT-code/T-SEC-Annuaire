@@ -1,0 +1,43 @@
+---
+
+- name: Ensure directory templates structure exists
+  file:
+    path: '/etc/postfix/{{ data_source }}'
+    state: directory
+
+- name: Ensure directory files structure exists
+  copy:
+    src: '{{ item.path }}'
+    dest: '/etc/postfix/{{ item.path }}'
+  with_filetree: files/
+
+- name: Template postfix {{ data_source }}
+  template:
+    src: '{{ item.src }}'
+    dest: '/etc/postfix/{{ data_source }}/{{ item.path }}'
+    mode: "0400"
+  with_filetree: templates/{{ data_source }}
+  tags: postfix
+
+- name: Template postfix
+  template:
+    src: '{{ item }}'
+    dest: '/etc/postfix/{{ item }}'
+    mode: "0400"
+  with_items:
+    - main.cf
+    - sasl_passwd
+  tags: postfix
+
+- name: activate sasl_passwd
+  shell: postmap /etc/postfix/sasl_passwd
+  when: relay.use
+
+- name: delete sasl_passwd
+  file:
+    path: /etc/postfix/sasl_passwd
+    state: absent
+
+- name: Restart Postfix
+  command: systemctl restart postfix
+  tags: postfix

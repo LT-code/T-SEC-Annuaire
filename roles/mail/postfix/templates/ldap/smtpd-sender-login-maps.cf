@@ -1,0 +1,2 @@
+query_filter = (|(mailacceptinggeneralid=%s)(maildrop=%s))
+result_attribute = uid

@@ -1,0 +1,12 @@
+[Unit]
+Description=Bind /etc/ldap/tls/CA.pem to /var/spool/postfix/etc/ldap/tls/CA.pem
+Before=postfix.service
+
+[Mount]
+What=/etc/ldap/tls/CA.pem
+Where=/var/spool/postfix/etc/ldap/tls/CA.pem
+Type=none
+Options=bind
+
+[Install]
+WantedBy=postfix.service

@@ -55,17 +55,22 @@
       - dovecot-core
       - dovecot-imapd
       - dovecot-lmtpd
-      - dovecot-mysql
       - dovecot-sieve
       - dovecot-managesieved
       - rspamd
       - redis-server
       - postfix
-      - postfix-mysql
       - postfix-pcre
       - redis-server
       - libsasl2-modules
       - libsasl2-modules-sql
+
+- name: Install programs {{data_source}}
+  apt:
+    state: latest
+    pkg:
+      - "dovecot-{{data_source}}"
+      - "postfix-{{data_source}}"
 
 
 - name: Set hostname

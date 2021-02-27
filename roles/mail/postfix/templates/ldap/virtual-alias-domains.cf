@@ -1,0 +1,3 @@
+query_filter = mailacceptinggeneralid=*@%s
+result_attribute = mailacceptinggeneralid
+result_format = %d

@@ -1,0 +1,9 @@
+
+- name: Template postfix
+  template:
+    src: '{{ item.src }}'
+    dest: '/etc/postfix/mysql/{{ item.path }}'
+    mode: "0644"
+  with_filetree: templates/mysql
+  when: item.state == 'file'
+  tags: postfix
