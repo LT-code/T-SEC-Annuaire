@@ -23,7 +23,7 @@
     classic: yes
 
 - name: Set wekan port
-  shell: snap set wekan port="3001"
+  shell: snap set wekan port='3001'; snap set wekan root-url='https://kanban.tsec901g3.tk'
 
 - name: Enable and start wekan
   shell: systemctl enable snap.wekan.wekan; systemctl restart snap.wekan.wekan
@@ -64,4 +64,7 @@
 
 - name: Create certificate for wekan
   shell: sudo certbot --nginx -n -m {{ certbot_email }} --agree-tos -d {{ kaban_domain_name }}
+
+- name: Setup LDAP for wekan
+	shell: snap set wekan caddy-enabled='false'; snap set wekan default-authentication-method='ldap'; snap set wekan ldap-authentication='true'; snap set wekan ldap-authentication-password='y7pcASQ7T77S'; snap set wekan ldap-authentication-userdn='cn=admin,dc=tsec901g3,dc=tk'; snap set wekan ldap-background-sync='true'; snap set wekan ldap-background-sync-import-new-users='true'; snap set wekan ldap-background-sync-interval='every 1 minute'; snap set wekan ldap-basedn='dc=tsec901g3,dc=tk', snap set wekan ldap-email-field='mail'; snap set wekan ldap-enable='true'; snap set wekan ldap-fullname-field='cn'; snap set wekan ldap-group-filter-enable='false'; snap set wekan ldap-group-filter-id-attribute='cn'; snap set wekan ldap-host='ldap.tsec901g3.tk'; snap set wekan ldap-log-enabled='false'; snap set wekan ldap-login-fallback='true'; snap set wekan ldap-merge-existing-users='true'; snap set wekan ldap-port='389'; snap set wekan ldap-user-search-field='uid'; snap set wekan ldap-user-search-filter='(&(objectclass=inetOrgPerson))'; snap set wekan ldap-user-search-scope='sub'; snap set wekan ldap-username-field='uid'
 
