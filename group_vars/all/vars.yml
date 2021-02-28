@@ -1,0 +1,12 @@
+domain_name: tsec901g3
+domain_suffix: tk
+
+domain: "{{domain_name}}.{{domain_suffix}}"
+
+ldap_server:
+  dc: "dc={{domain_name}},dc={{domain_suffix}}"
+  hostname: "ldap.{{domain}}"
+  ca_file: /etc/ldap/tls/CA.pem
+
+ldap_server_dn_password: B3jA7KFAzoORN8A9PQx7
+

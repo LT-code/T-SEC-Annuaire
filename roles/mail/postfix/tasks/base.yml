@@ -1,4 +1,18 @@
 ---
+- name: Setting ldap credentials
+  set_fact:
+    ldap_postfix_connect: |
+      server_host = ldap://{{ldap_server.hostname}}
+      start_tls = no
+      version = 3
+      tls_ca_cert_file = {{ldap_server.ca_file}}
+      tls_require_cert = no
+      bind = yes
+      bind_dn = cn=mailAccountReader,{{ldap_server.dc}}
+      bind_pw = {{ldap_server_dn_password}}
+      search_base = ou=Mail,{{ldap_server.dc}}
+      scope = sub
+  when: data_source == ldap
 
 - name: Ensure directory templates structure exists
   file:

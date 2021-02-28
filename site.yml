@@ -1,6 +1,17 @@
 ---
-# This is the top-level playbook
+#####################
+## ldap server
+#####################
+- hosts: ldap
+  become: true
+  vars_files:
+  - group_vars/ssh-connection.yml
+  roles:
+    - general
 
+#####################
+## mail server
+#####################
 - hosts: mail
   become: true
   vars_files:
@@ -10,12 +21,17 @@
     - mail/general
     - mail/certbot
     - mail/mariadb
+    - { role: mail/mariadb, when: data_source == mysql }
     - mail/dovecot
     - mail/postfix
     - mail/rspamd
-    - mail/postfixadmin
+    - mail/apache2
+    - { role: mail/postfixadmin, when: data_source == mysql }
     - mail/rspamd-gui
 
+#####################
+## kanban server
+#####################
 - hosts: kanban
   become: true
   vars_files:
@@ -23,3 +39,18 @@
   roles:
     - general
     - wekan
+
+#####################
+## video server
+#####################
+- hosts: jitsi
+  become: true
+  roles:
+  # central
+  - { role: jitsi/jitsi-meet, tags: [ 'meet' ] }
+  - { role: jitsi/jitsi-exporter, when: run_exporter_container, tags: [ 'jitsi-exporter' ] }
+  - { role: jitsi/turn-server, when: turn_enabled is defined and turn_enabled, tags: [ 'turn-server' ] }
+  # video bridge
+  - { role: jitsi/videobridge, tags: [ 'videobridge' ] }
+  # jibris installation not need
+  #- { role: jibri, tags: [ 'jibri' ] }

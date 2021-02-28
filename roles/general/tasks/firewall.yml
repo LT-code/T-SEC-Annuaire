@@ -1,0 +1,39 @@
+---
+- name: install shorewall
+  apt:
+    package: shorewall
+    state: present
+
+- name: Files shorewall
+  copy:
+    src: '{{ item.path }}'
+    dest: '/etc/shorewall/{{ item.path }}'
+  with_filetree: files/
+  
+- name: Template shorewall
+  template:
+    src: '{{ item.path }}'
+    dest: '/etc/shorewall/{{ item.path }}'
+  with_filetree: templates/
+
+- name: What is my inventory_hostname
+  debug: 
+    msg: "{{hostvars}}"
+
+- name: What is my ansible_hostname
+  debug: 
+    msg: "{{ansible_hostname}}"
+
+- name: correct debian 9 conf
+  shell: mv /etc/shorewall/shorewall.conf.deb_9 /etc/shorewall/shorewall.conf
+  when: ansible_distribution_release == "stretch"
+
+- name: restart shorewall
+  service:
+    name: shorewall
+    state: restarted
+
+- name: Enable shorewall
+  service:
+    name: shorewall
+    enabled: yes

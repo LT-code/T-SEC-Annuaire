@@ -1,0 +1,19 @@
+---
+# don't forget to encrypt this file before commiting changes to git
+vault_token_auth_appsecret: CHANGEME
+vault_turn_secret: you_should_change_this
+
+## Required vars for central host
+# XMPP Password for jicofo
+vault_jicofo_pass: nat1
+# XMPP Password for jicofo component
+vault_jicofo_secret: nat2
+# If using prometheus exporter
+vault_exporter_xmpp_pass: CHANGEME
+
+## Optional vars (if central host also runs videobridge or jibri)
+# XMPP Password for videbridge
+vault_videobridge_pass: nat3
+# XMPP Password for jibri
+vault_jibri_pass: CHANGEME
+

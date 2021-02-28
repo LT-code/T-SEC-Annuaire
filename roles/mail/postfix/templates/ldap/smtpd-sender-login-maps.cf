@@ -1,2 +1,4 @@
+{{ldap_postfix_connect}}
+
 query_filter = (|(mailacceptinggeneralid=%s)(maildrop=%s))
 result_attribute = uid

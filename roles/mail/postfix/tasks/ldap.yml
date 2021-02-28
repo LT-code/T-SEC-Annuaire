@@ -20,19 +20,18 @@
     dest: /etc/systemd/system/var-spool-postfix-etc-ldap-tls-CA.pem.mount
   tags: postfix
 
-
 - name: reload systemd
   command: systemctl daemon-reload
 
-- name: Reload mount service
-  service:
-    name: var-spool-postfix-etc-ldap-tls-CA.pem.mount
-    state: reloaded
-
-- name: Enable mount service
-  service:
-    name: var-spool-postfix-etc-ldap-tls-CA.pem.mount
-    enabled: yes
+  #- name: Reload mount service
+  #  service:
+  #    name: var-spool-postfix-etc-ldap-tls-CA.pem.mount
+  #    state: reloaded
+  #
+  #- name: Enable mount service
+  #  service:
+  #    name: var-spool-postfix-etc-ldap-tls-CA.pem.mount
+  #    enabled: yes
 
 - name: ansible create directory example
   file:

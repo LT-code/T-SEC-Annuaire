@@ -1,3 +1,5 @@
+{{ldap_postfix_connect}}
+
 query_filter = mailacceptinggeneralid=*@%s
 result_attribute = mailacceptinggeneralid
 result_format = %d

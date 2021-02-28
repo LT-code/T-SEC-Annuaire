@@ -35,8 +35,8 @@
   when: item.state == 'file'
   tags: dovecot
 
-#- name: restart dovecot
-#  service:
-#    name: dovecot
-#    state: restarted
-#  tags: dovecot
+- name: restart dovecot
+  service:
+    name: dovecot
+    state: restarted
+  tags: dovecot

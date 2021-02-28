@@ -1,0 +1,8 @@
+firewall:
+  interface: eth0
+  rules:
+    - "22"
+    - "80,443"
+
+kaban_domain_name: "kanban.{{ domain }}"
+certbot_email: "domain@{{ domain }}"

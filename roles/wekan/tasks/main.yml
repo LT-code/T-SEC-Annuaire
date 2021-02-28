@@ -1,64 +1,67 @@
-  become: true
-  gather_facts: no
-  vars:
-  domain_name: kanban.tsec901g3.tk
-  letsencrypt_email: eloi.carlot-pascal@epitech.eu
-
+---
+#  become: true
+#  gather_facts: no
+#  vars:
+#  domain_name: kanban.tsec901g3.tk
+#  letsencrypt_email: eloi.carlot-pascal@epitech.eu
 - name: Update / Upgrade APT
-	apt: upgrade=dist update_cache=yes
+  apt:
+    upgrade: dist
+    update_cache: yes
 
 - name: Snapd installation
-	apt:
-		name: snapd
-		state: present
+  apt:
+    name: snapd
+    state: present
 
 - name: Snap install / refresh core
- 	shell: sudo snap install core; sudo snap refresh core
+  shell: sudo snap install core; sudo snap refresh core
 
 - name: Wekan Installation
-	snap:
-		name: wekan
-		classic: yes
+  snap:
+    name: wekan
+    classic: yes
 
 - name: Set wekan port
-	shell: snap set wekan port="3001"
+  shell: snap set wekan port="3001"
 
 - name: Enable and start wekan
-	shell: systemctl enable snap.wekan.wekan; systemctl restart snap.wekan.wekan
+  shell: systemctl enable snap.wekan.wekan; systemctl restart snap.wekan.wekan
 
 - name: Nginx Installation
-	apt:
-		name: nginx
-		state: present
+  apt:
+    name: nginx
+    state: present
 
 - name: Set nginx bucket size
-	shell: sed -i "/server_names_hash_bucket_size/s/# //g" /etc/nginx/nginx.conf
+  shell: sed -i "/server_names_hash_bucket_size/s/# //g" /etc/nginx/nginx.conf
 
 - name: Restart nginx
-	service: name=nginx state=restarted
+  service: name=nginx state=restarted
 
 - name: Remove default nginx config
-	file: name=/etc/nginx/sites-enabled/default state=absent
+  file: name=/etc/nginx/sites-enabled/default state=absent
 
 - name: Create nginx conf for wekan
-	template:
-		src: templates/wekan.conf
-		dest: /etc/nginx/conf.d/wekan.conf
+  template:
+    src: templates/wekan.conf
+    dest: /etc/nginx/conf.d/wekan.conf
 
 - name: Restart nginx for activate wekan site
-	service: name=nginx state=restarted
+  service: name=nginx state=restarted
 
 - name: Add debian apt repo
-	shell: echo "deb http://ftp.debian.org/debian buster-backports main" >> /etc/apt/sources.list; apt update -y
+  shell: echo "deb http://ftp.debian.org/debian buster-backports main" >> /etc/apt/sources.list; apt update -y
 
 - name: Certbot Installation
-	snap:
-		name: certbot
-		classic: yes
+  snap:
+    name: certbot
+    classic: yes
 
 - name: Link certbot binary
-	shell: sudo ln -s /snap/bin/certbot /usr/bin/certbot
+  shell: sudo ln -s /snap/bin/certbot /usr/bin/certbot
+  ignore_errors: yes
 
 - name: Create certificate for wekan
-	shell: sudo certbot --nginx -n -m {{ certbot_email }} --agree-tos -d {{ domain_name }}
+  shell: sudo certbot --nginx -n -m {{ certbot_email }} --agree-tos -d {{ kaban_domain_name }}
 

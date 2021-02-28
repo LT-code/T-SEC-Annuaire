@@ -1,0 +1,5 @@
+firewall:
+  interface: eth0
+  rules:
+    - "22"
+    - "389"

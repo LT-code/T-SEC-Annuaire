@@ -1,0 +1,7 @@
+---
+- name: Install base dependencies
+  apt:
+    pkg:
+      - apache2
+      - python-certbot-apache
+    state: present

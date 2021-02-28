@@ -5,7 +5,6 @@
   apt:
     pkg:
       - postfixadmin
-      - python-certbot-apache
     state: present
 
 - name: Delete default apache config

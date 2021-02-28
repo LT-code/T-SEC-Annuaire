@@ -1,3 +1,5 @@
+{{ldap_postfix_connect}}
+
 query_filter = maildrop=%s
 result_attribute = homeDirectory
 result_format = %s/mailbox/

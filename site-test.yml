@@ -1,25 +1,30 @@
 ---
-# This is the top-level playbook
-
+#####################
+## mail server
+#####################
 - hosts: mail
   become: true
   vars_files:
   - group_vars/ssh-connection.yml
   roles:
-    - general
+    #- general
     #- mail/general
     #- mail/certbot
-    #- mail/mariadb
+    #- { role: mail/mariadb, when: data_source == mysql }
     #- mail/dovecot
     - mail/postfix
     #- mail/rspamd
-    #- mail/postfixadmin
+    #- mail/apache2
+    #- { role: mail/postfixadmin, when: data_source == mysql }
     #- mail/rspamd-gui
-
+      
+######################
+### kanban server
+######################
 #- hosts: kanban
 #  become: true
 #  vars_files:
-#  - group_vars/ssh-connection.yml
+#    - group_vars/ssh-connection.yml
 #  roles:
 #    - general
 #    - wekan
