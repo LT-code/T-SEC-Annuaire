@@ -4,6 +4,7 @@ firewall:
   rules:
     - "22"
     - "25"
+    - "587"
     - "993"
 
 host: T-SEC-MAIL

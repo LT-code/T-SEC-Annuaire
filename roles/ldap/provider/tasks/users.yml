@@ -1,0 +1,40 @@
+---
+
+- include_csv: src=files/users.csv
+
+- name: user entries
+  ldap_entry:
+    dn: "uid={{ item.uid }},ou=People,{{ suffix }}"
+    objectClass:
+      - inetOrgPerson
+      - posixAccount
+      - ldapPublicKey
+    uidNumber: "{{ item.uidNumber }}"
+    gidNumber: "{{ item.gidNumber }}"
+    sn: "{{ item.sn }}"
+    cn: "{{ item.cn }}"
+    userPassword: "{{ item.userPassword }}"
+    homeDirectory: "/home/{{ item.uid }}"
+    mail: "{{ item.uid }}@{{ domain }}"
+    sshPublicKey: "{{ item.sshPublicKey }}"
+    uid: "{{ item.uid }}"
+    bind_dn: "cn=admin,{{ suffix }}"
+    bind_pw: "{{ admin_pw }}"
+    state: present
+  with_items: users
+
+# attributes
+
+- include_csv: src=files/pubkeys.csv
+
+# The entry can has multiple sshPublicKey.
+# To append is using ``present``. To replace is using ``exact``.
+- name: user attributes
+  ldap_attr:
+    dn: "uid={{ item.uid }},ou=People,{{ suffix }}"
+    name: sshPublicKey
+    values: "{{ item.sshPublicKey }}"
+    bind_dn: "cn=admin,{{ suffix }}"
+    bind_pw: "{{ admin_pw }}"    
+    state: exact
+  with_items: pubkeys

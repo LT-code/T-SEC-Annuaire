@@ -8,6 +8,8 @@
   - group_vars/ssh-connection.yml
   roles:
     - general
+    - provider
+    - slapd
 
 #####################
 ## mail server

@@ -3,3 +3,13 @@ firewall:
   rules:
     - "22"
     - "389"
+      
+# debconf
+organization: {{domain_name}}
+
+# BDB, HDB, MDB
+backend: MDB
+
+# cn=config
+log_level: 256
+suffix: {{ldap_server.dc}}

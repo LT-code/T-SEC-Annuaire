@@ -1,0 +1,38 @@
+---
+
+- name: group entries
+  ldap_entry:
+    dn: 'cn={{ item }},ou=Groupe,{{ suffix }}'
+    objectClass: groupOfNames
+    cn: '{{ item }}'
+    member: cn=noexist
+    bind_dn: "cn=admin,{{ suffix }}"
+    bind_pw: "{{ admin_pw }}"
+    state: present
+  with_items:
+    - devel
+    - support
+    - sales
+
+- name: Branche Dev
+  ldap_attr:
+    dn: 'cn=devel,ou=Groups,{{ suffix }}'
+    name: member
+    values: 'uid={{ item }},ou=People,{{ suffix }}'
+    bind_dn: 'cn=admin,{{ suffix }}'
+    bind_pw: '{{ admin_pw }}'
+    state: present
+  with_items:
+    - user01
+
+- name: Branche Etudiants
+  ldap_attr:
+    dn: 'cn=support,ou=Groupe,{{ suffix }}'
+    name: member
+    values: 'uid={{ item }},ou=People,{{ suffix }}'    
+    bind_dn: 'cn=admin,{{ suffix }}'
+    bind_pw: '{{ admin_pw }}'
+    state: present
+  with_items:
+    - user01
+
