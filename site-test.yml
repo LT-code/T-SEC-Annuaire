@@ -8,15 +8,15 @@
   - group_vars/ssh-connection.yml
   roles:
     #- general
-    #- mail/general
-    #- mail/certbot
-    #- { role: mail/mariadb, when: data_source == mysql }
-    #- mail/dovecot
+    - mail/general
+    - mail/certbot
+    - { role: mail/mariadb, when: data_source == mysql }
+    - mail/dovecot
     - mail/postfix
-    #- mail/rspamd
-    #- mail/apache2
-    #- { role: mail/postfixadmin, when: data_source == mysql }
-    #- mail/rspamd-gui
+    - mail/rspamd
+    - mail/apache2
+    - { role: mail/postfixadmin, when: data_source == mysql }
+    - mail/rspamd-gui
       
 ######################
 ### kanban server
